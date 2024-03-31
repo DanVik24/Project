@@ -1,4 +1,4 @@
-# Импортирт библиотек
+# Импортир библиотек
 import pandas as pd
 import datetime as dt 
 from scipy import stats as st 
