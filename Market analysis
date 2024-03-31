@@ -1,0 +1,9 @@
+# Импортирт библиотек
+import pandas as pd
+import datetime as dt 
+from scipy import stats as st 
+import numpy as np 
+import math as mth 
+import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy.stats as stats
