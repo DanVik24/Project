@@ -1,9 +1,5 @@
-# Импортирт библиотек
+# Импортирт библиотек и открытие файла
 import pandas as pd
-import datetime as dt 
-from scipy import stats as st 
-import numpy as np 
-import math as mth 
 import matplotlib.pyplot as plt
-import seaborn as sns
-import scipy.stats as stats
+data = pd.read_csv('C:/Users/admin/qwe.csv', sep=';')
+data.head()
