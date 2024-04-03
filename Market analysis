@@ -2,4 +2,3 @@ import pandas as pd
 import matplotlib.pyplot as plt
 data = pd.read_csv('C:/Users/admin/qwe.csv', sep=';')
 data.head()
-#data.hist(figsize=(15, 20))
