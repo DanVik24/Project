@@ -1,46 +1,15 @@
 # Импортирт библиотек
 import pandas as pd
 import matplotlib.pyplot as plt
-data_sv = pd.read_csv('C:/Users/admin/offers_sv_2.csv', sep=';')
-data_oct = pd.read_csv('C:/Users/admin/offers_oct_2.csv', sep=';')
-data_pr = pd.read_csv('C:/Users/admin/offers_pr_2.csv', sep=';')
-data_len = pd.read_csv('C:/Users/admin/offers_len_2.csv', sep=';')
+data_all = pd.read_csv('C:/Users/admin/all/offers all.csv', sep=';')
 
 # Загружаем данные и смотрим основную информацию 
-display(data_sv.head())
-display(data_sv.info())
 
-display(data_oct.head())
-display(data_oct.info())
+display(data_all.head())
+display(data_all.info())
 
-display(data_pr.head())
-display(data_pr.info())
-
-display(data_len.head())
-display(data_len.info())
-
-# переименование столбцов для каждого файла
-data_sv=data_sv.rename(columns={'Количество комнат': 'rooms', 
-                               'Тип': 'type', 
-                               'район': 'district', 
-                               'Адрес': 'address', 
-                               'Площадь, м2': 'area',
-                               'Этаж': 'floor', 
-                               'Цена': 'price', 
-                               'Ремонт': 'repair', 
-                               'Ссылка на объявление': 'link'}) 
-
-data_oct=data_oct.rename(columns={'Количество комнат': 'rooms', 
-                               'Тип': 'type', 
-                               'район': 'district', 
-                               'Адрес': 'address', 
-                               'Площадь, м2': 'area',
-                               'Этаж': 'floor', 
-                               'Цена': 'price', 
-                               'Ремонт': 'repair', 
-                               'Ссылка на объявление': 'link'}) 
-                                                            
-data_pr=data_pr.rename(columns={'Количество комнат': 'rooms', 
+# переименование столбцов
+data_all= data_all.rename(columns={'Количество комнат': 'rooms', 
                                'Тип': 'type', 
                                'район': 'district', 
                                'Адрес': 'address', 
@@ -50,17 +19,25 @@ data_pr=data_pr.rename(columns={'Количество комнат': 'rooms',
                                'Ремонт': 'repair', 
                                'Ссылка на объявление': 'link'})
 
-data_len=data_len.rename(columns={'Количество комнат': 'rooms', 
-                               'Тип': 'type', 
-                               'район': 'district', 
-                               'Адрес': 'address', 
-                               'Площадь, м2': 'area',
-                               'Этаж': 'floor', 
-                               'Цена': 'price', 
-                               'Ремонт': 'repair', 
-                               'Ссылка на объявление': 'link'})    
+data_all['rooms'].unique() #поиск уникальных названий
 
-Нужно изменить типы объектов в столбцах:\
-*rooms* - изменить на тип объекта int\
-*area* - изменить на int\
-*floor* - изменить на int\
+display(data_all.head())
+display(data_all.info())
+
+data_all['rooms'].unique() #поиск уникальных названий
+
+data_all['rooms'].value_counts()
+
+data_all['rooms'] = data_all['rooms'].fillna(0).astype('int')
+
+data_all.query('rooms == 0')
+
+
+#Необходимо изменить типы объектов в столбцах:\
+#*rooms* - изменить на тип объекта int\
+#*area* - изменить на int\
+#*floor* - изменить на int\
+
+
+
+
