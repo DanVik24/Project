@@ -32,12 +32,17 @@ data_all['rooms'] = data_all['rooms'].fillna(0).astype('int')
 
 data_all.query('rooms == 0')
 
+# изменим тип данных для дальнейшего исследовани в следующих столбцах
+data['rooms'] = data['rooms'].fillna(0).astype('int')
+data['area'] = data['area'].fillna(0).astype('int')
+data['floor'] = data['floor'].fillna(0).astype('int')
 
-#Необходимо изменить типы объектов в столбцах:\
-#*rooms* - изменить на тип объекта int\
-#*area* - изменить на int\
-#*floor* - изменить на int\
-#
+data.isnull().sum() #отпределяю пропущенные значения в столбцах
 
+# пропуски в столбцах, где указн ремон заменим на 0 как "нет информации о ремонте"
+data['repair'] = data['repair'].fillna(0)
 
-
+#добавление столбца - количество этажей в доме
+data['floor_all'] = data['floor'].str.split('/').str.get(1)
+data['floor'] = data['floor'].str.split('/').str.get(0)
+data
