@@ -37,7 +37,7 @@ data_all.query('rooms == 0')
 #*rooms* - изменить на тип объекта int\
 #*area* - изменить на int\
 #*floor* - изменить на int\
-
+#
 
 
 
