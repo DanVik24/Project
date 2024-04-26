@@ -3,10 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 data_all = pd.read_csv('C:/Users/admin/all/offers all.csv', sep=';')
 
-# Загружаем данные и смотрим основную информацию 
 
-display(data_all.head())
-display(data_all.info())
+#Загружаем данные 
+data = pd.read_csv('C:/Users/admin/all/offers_ALL 1.csv', sep=';')
+
+display(data.head())
+
 
 # переименование столбцов
 data_all= data_all.rename(columns={'Количество комнат': 'rooms', 
@@ -18,31 +20,47 @@ data_all= data_all.rename(columns={'Количество комнат': 'rooms',
                                'Цена': 'price', 
                                'Ремонт': 'repair', 
                                'Ссылка на объявление': 'link'})
+# смотрим основную информацию о датафрейме
+display(data.info())
 
-data_all['rooms'].unique() #поиск уникальных названий
+#добавление столбца - количество этажей в доме
+data['floor_all'] = data['floor'].str.split('/').str.get(1)
+data['floor'] = data['floor'].str.split('/').str.get(0)
+data
+
+# изменим тип данных для дальнейшего исследовани в следующих столбцах
+data['rooms'] = data['rooms'].fillna(0).astype('int')
+data['floor'] = data['floor'].fillna(0).astype('int')
 
 display(data_all.head())
 display(data_all.info())
 
 data_all['rooms'].unique() #поиск уникальных названий
 
-data_all['rooms'].value_counts()
+# посчитаем пропуски
+print('Количество дубликатов:', data.duplicated().sum())
+print('Количие пропусков:')
+data.isnull().sum() 
 
-data_all['rooms'] = data_all['rooms'].fillna(0).astype('int')
-
-data_all.query('rooms == 0')
-
-# изменим тип данных для дальнейшего исследовани в следующих столбцах
-data['rooms'] = data['rooms'].fillna(0).astype('int')
-data['area'] = data['area'].fillna(0).astype('int')
-data['floor'] = data['floor'].fillna(0).astype('int')
-
-data.isnull().sum() #отпределяю пропущенные значения в столбцах
-
-# пропуски в столбцах, где указн ремон заменим на 0 как "нет информации о ремонте"
+# замена пропусков
 data['repair'] = data['repair'].fillna(0)
 
-#добавление столбца - количество этажей в доме
-data['floor_all'] = data['floor'].str.split('/').str.get(1)
-data['floor'] = data['floor'].str.split('/').str.get(0)
-data
+# районы
+display(data['district'].value_counts())
+data['district'].hist();
+
+data_all['rooms'].unique() #поиск данных по столбцу комнаты
+data_all['rooms'].value_counts()
+
+display(data['rooms'].value_counts()) #посчитаем количество квартир в зависимости от количества комнат
+data['rooms'].hist(figsize=(4,4)) #построим диаграмму 
+
+#посмотрим скольки комнатных квартир в объявлениях встречается больше всего
+category = data.groupby('rooms')['ID'].count().sort_values(ascending=False).reset_index()
+category['%'] = 100*(category['ID'] / category['ID'].sum()).round(3)
+category = category.rename(columns={'ID':'count'})
+category
+
+#сгрупируем данные по району
+data_district = data.pivot_table(index = 'district', values = 'ID', columns='rooms', aggfunc = 'count').reset_index()
+data_district 
