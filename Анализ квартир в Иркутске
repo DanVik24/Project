@@ -10,8 +10,8 @@ data = pd.read_csv('C:/Users/admin/all/offers_ALL 1.csv', sep=';')
 display(data.head())
 
 
-# переименование столбцов
-data_all= data_all.rename(columns={'Количество комнат': 'rooms', 
+# переименование столбцов для удобного использования 
+data = data.rename(columns={'Количество комнат': 'rooms', 
                                'Тип': 'type', 
                                'район': 'district', 
                                'Адрес': 'address', 
@@ -23,17 +23,22 @@ data_all= data_all.rename(columns={'Количество комнат': 'rooms',
 # смотрим основную информацию о датафрейме
 display(data.info())
 
-#добавление столбца - количество этажей в доме
+# добавим столбец 'floor_all'
 data['floor_all'] = data['floor'].str.split('/').str.get(1)
 data['floor'] = data['floor'].str.split('/').str.get(0)
-data
+data['price_square'] = (data['price'] / data['area'])/1000 # создадим столбец "price_square" с данными о цене за кв.м. и 
+data['price'] = data['price']/1000000  # поделим результат на 100 для лучшего восприятия цены
+
+data['price'] = data['price'].round(1) #  округлим числа до десятых
+data['price_square'] = data['price_square'].round(1)
+data.sample(5) 
 
 # изменим тип данных для дальнейшего исследовани в следующих столбцах
 data['rooms'] = data['rooms'].fillna(0).astype('int')
 data['floor'] = data['floor'].fillna(0).astype('int')
 
-display(data_all.head())
-display(data_all.info())
+display(data.sample(5)) # проверим изменненые данные
+display(data.info())
 
 data_all['rooms'].unique() #поиск уникальных названий
 
@@ -49,8 +54,23 @@ data['repair'] = data['repair'].fillna(0)
 display(data['district'].value_counts())
 data['district'].hist();
 
-data_all['rooms'].unique() #поиск данных по столбцу комнаты
-data_all['rooms'].value_counts()
+# посмотрим данные о типе квартир
+data['type'].unique()
+
+# Изменим столбец с данными о типе квартиры: заменим данные на "second" - вторичное жилье и "new" - новостройка.
+data['type']
+data = data.replace({'type':{'Продажа квартиры в новостройке':"new", 'Продажа квартиры': "second"}})
+data.head()
+
+# посмотрим данные о колличестве комнат
+data['rooms'].unique()
+data[data['rooms'] == 0] # квартиры где указанно кол-во комнат = 0
+# По данным квартир с указаннием о количесве комнат = 0
+# можем сделать предположение, что данные квартиры являются новостройками 
+# со свободной планировкой. Оставим как есть.
+
+display(data['rooms'].value_counts()) #посчитаем количество квартир в зависимости от количества комнат
+data['rooms'].hist(figsize=(4,4)) #построим диаграмму 
 
 display(data['rooms'].value_counts()) #посчитаем количество квартир в зависимости от количества комнат
 data['rooms'].hist(figsize=(4,4)) #построим диаграмму 
@@ -61,6 +81,23 @@ category['%'] = 100*(category['ID'] / category['ID'].sum()).round(3)
 category = category.rename(columns={'ID':'count'})
 category
 
-#сгрупируем данные по району
+#сгруппируем данные по району
 data_district = data.pivot_table(index = 'district', values = 'ID', columns='rooms', aggfunc = 'count').reset_index()
-data_district 
+data_district = data_district.fillna(0)
+display(data_district)
+display(data_district.info())
+
+# строим гистограммы 
+
+fig = px.histogram(data_district, # загружаем данные 
+                   x=[0, 1, 2, 3, 4, 5], # указываем столбец с данными для оси X 
+                   y= 'district',
+                   title='Распределение') # указываем заголовок 
+fig.update_layout(yaxis_title ='Районы') # подпись для оси X 
+fig.update_layout(xaxis_title ='Количество комнат') # подпись для оси Y 
+fig.show(); # выводим график
+
+# В полученном результате видим преобладание однокомнатных квартир в любом из районов
+
+# результат данных о цене за квартиру
+data['price'].describe().round()
