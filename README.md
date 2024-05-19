@@ -9,4 +9,4 @@
     3. Анализ данных
     4. Визуализация данных
     5. Вывод о задачах исследования
-Просмотр с графиками через ссылку - https://nbviewer.org/github/DanVik24/Project/blob/main/Анализ%20продаж%20квартир.ipynb
+Просмотр с графиками через ссылку - https://colab.research.google.com/gist/DanVik24/56c1e6df9865090b5f5b3f202357ccde/.ipynb
